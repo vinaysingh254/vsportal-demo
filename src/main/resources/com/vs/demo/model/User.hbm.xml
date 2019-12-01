@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping default-access="field">
+    <class name="com.vs.demo.model.User" table="USER_INFO">
+        <id name="id" type="java.lang.Long">
+            <column length="10" name="ID" precision="10" scale="0"/>
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="sequence_name">USER_INFO_SEQ</param>
+                <param name="hibernate_sequence">USER_INFO_SEQ</param>
+                <param name="initial_value">10000</param>
+                <param name="increment_size">1</param>
+            </generator>
+        </id>
+        <property name="name" column="NAME" type="java.lang.String" length="100"/>
+        <property name="email" column="EMAIL" type="java.lang.String" length="200"/>
+    </class>
+</hibernate-mapping>

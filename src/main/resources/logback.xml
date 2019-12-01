@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<configuration>
+
+    <contextName>VS_PORTAL</contextName>
+
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator"/>
+
+    <property scope="context" name="LOG_DIR" value="${VS_HOME}/logs"/>
+
+    <!-- appenders -->
+
+    <appender name="info" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/${CONTEXT_NAME}_info.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_DIR}/${CONTEXT_NAME}_info-%d{yyyy-MM-dd}.log</FileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="err" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- try to log to catalina.base, fall back to the "logs" folder -->
+        <file>${LOG_DIR}/${CONTEXT_NAME}_err.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_DIR}/${CONTEXT_NAME}_err-%d{yyyy-MM-dd}.log</FileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <!-- not a threshold filter, since we only want errors... -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- we omit error from the log, *all* messages here are errors -->
+            <pattern>%date %level [%thread] %logger{10} [%file : %line] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="trace" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/${CONTEXT_NAME}_trace.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_DIR}/${CONTEXT_NAME}_trace-%d{yyyy-MM-dd}.log</FileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>TRACE</level>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <!-- restrict wicket and hibernate logs -->
+    <logger name="org.apache.wicket.util.resource.ResourceStreamLocator">
+        <level value="INFO"/>
+    </logger>
+
+    <logger name="org.hibernate">
+        <level value="WARN"/>
+    </logger>
+
+    <logger name="com.vs.demo" additivity="false">
+        <level value="TRACE"/>
+        <appender-ref ref="trace"/>
+    </logger>
+
+
+    <root>
+        <level value="INFO"/>
+        <appender-ref ref="info"/>
+        <appender-ref ref="err"/>
+        <appender-ref ref="trace"/>
+    </root>
+</configuration>
