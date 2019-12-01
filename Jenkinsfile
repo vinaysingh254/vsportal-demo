@@ -1,6 +1,6 @@
 node{
     stage('SCM Checkout'){
-        git 'git@bitbucket.org:vinaysingh913/vsportal-demo.git'
+        git 'https://github.com/vinaysingh254/vsportal-demo.git'
     }
     stage('Compile-Package'){
         bat 'mvn clean package'
